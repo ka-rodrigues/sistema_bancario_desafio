@@ -23,23 +23,24 @@ def realizar_deposito(saldo, extrato_conta):
 
 ## SAQUE
 def realizar_saque(saldo, extrato_conta, quantidade_saques, LIMITE_DIARIO_SAQUE, LIMITE_SAQUE):       
-    if quantidade_saques >= LIMITE_DIARIO_SAQUE:
-      print("Limite Excedido")
-      return saldo, extrato_conta, quantidade_saques  
 
     while True:
-        valor_saque = float(input("Digite o valor que deseja sacar: "))
+      if quantidade_saques >= LIMITE_DIARIO_SAQUE:
+        print("Limite Excedido")
+        return saldo, extrato_conta, quantidade_saques  
+      
+      valor_saque = float(input("Digite o valor que deseja sacar: "))
 
-        if valor_saque <= 0.00:
+      if valor_saque <= 0.00:
           print("Valor Inválido")
 
-        elif valor_saque > LIMITE_SAQUE:
+      elif valor_saque > LIMITE_SAQUE:
           print("Saque negado, o valor máximo é de R$ 500.00")
         
-        elif valor_saque > saldo:
+      elif valor_saque > saldo:
           print("O Saldo não é suficiente")
       
-        else:
+      else:
           quantidade_saques += 1
           saldo -= valor_saque
           extrato_conta += f"Saque de R$ {valor_saque:.2f} efetuado\n".center(33)
