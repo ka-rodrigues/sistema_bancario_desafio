@@ -6,10 +6,45 @@ def exibir_menu():
 [1] Depósito
 [2] Saque
 [3] Extrato
-    
+[4] Criar Usuário
+[5] Criar Conta
+        
 ==========================
 """)
 
+def filtrar_usuario(cpf, usuarios):
+    usuarios_filtrados = [usuario for usuario in usuarios if usuario["cpf"] == cpf]
+    return usuarios_filtrados[0] if usuarios_filtrados else None
+
+def criar_usuario(usuarios):
+    cpf = input("Informe o CPF (somente número): ")
+    usuario = filtrar_usuario(cpf, usuarios)
+
+    if usuario:
+        print("\n Já existe usuário com esse CPF! ")
+        return
+
+    nome = input("Informe o nome completo: ")
+    data_nascimento = input("Informe a data de nascimento (dd-mm-aaaa): ")
+    endereco = input("Informe o endereço (logradouro, nro - bairro - cidade/sigla estado): ")
+
+    usuarios.append({"nome": nome, "data_nascimento": data_nascimento, "cpf": cpf, "endereco": endereco})
+
+    print(" Usuário criado com sucesso! ")
+
+    print("Cadastro Concluído.")
+      
+      
+def criar_conta(AGENCIA, numero_conta, usuarios):
+    cpf = input("Informe o CPF do usuário: ")
+    usuario = filtrar_usuario(cpf, usuarios)
+
+    if usuario:
+        print("\n Conta criada com sucesso! ")
+        return {"agencia": AGENCIA, "numero_conta": numero_conta, "usuario": usuario}
+
+    print("\n Usuário não encontrado, fluxo de criação de conta encerrado! ")
+   
 ## DEPÓSITO
 def realizar_deposito(saldo, extrato_conta):
     valor_deposito = float(input("Valor que deseja depositar: "))
@@ -63,11 +98,15 @@ def solicitar_extrato(saldo, extrato_conta):
     print("==============================")
 
 def main():
+  contas = []
+  usuarios = []
   saldo = 0.00
   quantidade_saques = 0
   LIMITE_DIARIO_SAQUE = 3
   LIMITE_SAQUE = 500.00
+  AGENCIA = "0001"
   extrato_conta = ""
+  
 
 
   while True: 
@@ -75,7 +114,7 @@ def main():
     menu_escolha = int(input("Digite a operação que você deseja: "))
     print()
 
-    if menu_escolha < 0 or menu_escolha > 3:
+    if menu_escolha < 0 or menu_escolha > 5:
       print("Operação inválida, digite uma operação válida: ")
     elif menu_escolha == 1:
       saldo, extrato_conta = realizar_deposito(saldo, extrato_conta)  
@@ -85,6 +124,16 @@ def main():
 
     elif menu_escolha == 3:
        solicitar_extrato(saldo, extrato_conta)
+
+    elif menu_escolha == 4:
+      criar_usuario(usuarios) 
+
+    elif menu_escolha == 5:
+      numero_conta = len(contas) + 1
+      conta = criar_conta(AGENCIA, numero_conta, usuarios)
+      
+      if conta:
+                contas.append(conta)
 
     else:
        print("Saindo . . .")
